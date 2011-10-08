@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TinyMCE Custom Buttons Demo</title>
+	<meta charset="utf-8" />	
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+
+	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+	<link rel="stylesheet" href="css/flick/jquery-ui-1.8.16.custom.css" type="text/css"/>
+	<link rel="stylesheet" href="css/stylesheet.css" type="text/css"/>
+
+	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="lib/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+	<script type="text/javascript" src="lib/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>	
+	<script type="text/javascript">
+		$(function() {
+			
+			editor = $('textarea.tinymce').tinymce({
+				theme:'advanced',
+				width: "650",
+				height: "425",
+				      
+				theme_advanced_buttons1:"code, separator, bold, italic, underline, strikethrough, separator, formatselect, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, outdent, indent, bullist, numlist, separator, link, unlink, anchor, separator, image, flickr",
+				theme_advanced_buttons2:"",
+				theme_advanced_buttons3:"",
+				theme_advanced_toolbar_location: "top", 
+				theme_advanced_toolbar_align: "left", 
+				theme_advanced_path_location: "bottom",
+
+			    setup : function(ed) {
+			        
+			        ed.addButton('flickr', {
+			            title : 'Load Images From Flickr',
+			            image : 'images/flickr.png',
+			            onclick : function() {
+
+			            	// show flick image browser
+							$("#imageBrowser").dialog({
+								width:600,
+								height: 475,
+								modal:true,
+								position: 'center',
+								resizable: false,
+								buttons: {
+									Select : function(){
+										var images = $('.selected img');
+										
+										if( images.length > 0){
+											images.each(function(key,value){
+												var img = '<img src="' + $(value).data('large') + '" alt="Toys For Shots 2008">';
+												ed.execCommand('mceInsertContent',false,img);
+											});
+											$( this ).dialog( "close" );											
+										} else {
+											// you must select 1 image
+										}
+
+									},
+									Cancel : function(){
+										$( this ).dialog( "close" );
+									}
+								},
+								close : function(event,ui){
+									$(this)
+										.fadeOut('slow')
+										.dialog('destroy');
+									$('.selected').removeClass();
+								}
+							});												            	
+			            }
+			        });
+
+			    }
+
+			});
+
+
+			// when a user clicks on the image in our flickr browser
+			$("#imageBrowser img").click(function(e){
+				e.preventDefault();
+				// add selected class to this image
+				$(this).parent().toggleClass('selected');
+			});
+
+		});
+	</script>
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="content">
+			<div class="page-header">
+				<h1>BlogCFC <small>the greatest thing since sliced bread</small></h1>
+			</div>
+
+			<div class="row">
+				<div class="span14">
+					
+					<h2>Add Blog Post</h2>			
+	
+					<form method="post">
+						<div class="clearfix">
+							<label for="title">Title</label>
+							<div class="input">
+								<input class="xlarge" id="title" name="title" size="30" type="text">
+							</div>
+						</div>
+						<div class="clearfix">
+							<label for="description">Body</label>
+							<div class="input">
+								<textarea id="body" name="body" class="tinymce">&nbsp;</textarea>
+							</div>
+						</div>
+						<div class="actions" align="right">
+							<button type="reset" class="btn">Cancel</button>&nbsp;
+            				<input type="submit" class="btn primary" value="Save changes">
+          				</div>												
+					</form>			
+
+				</div>
+			</div>
+		</div>
+
+		<footer>
+			<p>This is a sample application showing off custom toolbar buttons in TinyMCE</p>
+		</footer>
+
+	</div>
+
+	<div id="imageBrowser" title="Flickr Image Browser" style="display:none;">
+		<ul>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6187/6153994021_347b3656a7_t.jpg" data-large="http://farm7.static.flickr.com/6187/6153994021_a0fdcec8ab_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6166/6154536846_7bfe3b9f0a_t.jpg" data-large="http://farm7.static.flickr.com/6166/6154536846_61650b4ab7_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6065/6154536826_d96fd51cce_t.jpg" data-large="http://farm7.static.flickr.com/6065/6154536826_b771555045_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6090/6153993967_681877568f_t.jpg" data-large="http://farm7.static.flickr.com/6090/6153993967_d7d1b05c0d_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6074/6153993955_40eb636c81_t.jpg" data-large="http://farm7.static.flickr.com/6074/6153993955_ecc17915f1_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6200/6154536722_662f91f598_t.jpg" data-large="http://farm7.static.flickr.com/6200/6154536722_dddeb7dc15_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6159/6153993905_6648b1b8e7_t.jpg" data-large="http://farm7.static.flickr.com/6159/6153993905_e1d19ac0cc_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6070/6154536616_5466e581c8_t.jpg" data-large="http://farm7.static.flickr.com/6070/6154536616_48230f5d33_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6173/6153993751_018ea075ee_t.jpg" data-large="http://farm7.static.flickr.com/6173/6153993751_5e01fa48ba_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6171/6153993693_fabb0b9f14_t.jpg" data-large="http://farm7.static.flickr.com/6171/6153993693_6f8f6417b2_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6152/6153993635_f6fb66cabe_t.jpg" data-large="http://farm7.static.flickr.com/6152/6153993635_8cd87d2bf2_o.jpg"></a></li>
+			<li><a href="#"><img src="http://farm7.static.flickr.com/6178/6153982727_e211178af6_t.jpg" data-large="http://farm7.static.flickr.com/6178/6153982727_990ef34849_o.jpg"></a></li>
+		</ul>
+	</div>
+
+</body>
+</html>
